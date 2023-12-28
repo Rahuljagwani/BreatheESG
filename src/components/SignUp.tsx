@@ -24,7 +24,7 @@ const SignUpBox: React.FC<RegisterProp> = ({ setRegister }: RegisterProp) => {
             .then((token) => {
                 dispatch(setUser({ email: user.email as string, token: token }))
             });
-        navigate('/user');
+        navigate('/user/dm');
     };
 
     const handleRegister = (e: React.MouseEvent) => {

@@ -1,24 +1,16 @@
 import React, { useEffect } from 'react'
 import { getAuth } from 'firebase/auth';
-import { useLocation, useNavigate } from 'react-router';
+import { useNavigate } from 'react-router';
 import { signOutLocal } from '../auth/Register';
 import logo from '../images/logo.webp'
+import whitelogo from '../images/whitelogo.png'
 import { UserOutlined } from '@ant-design/icons';
-import { Button, Layout, Menu, theme } from 'antd';
+import { Layout, Menu, Select, Typography } from 'antd';
 import { Link } from 'react-router-dom';
+import { MenuItem, StateGlobalProviderProps } from '../@d.types';
 
 
-const { Header, Content, Footer, Sider } = Layout;
-
-interface MenuItem {
-    icon: React.ReactNode;
-    label: string;
-    route: string;
-}
-
-interface StateGlobalProviderProps {
-    children: JSX.Element
-}
+const { Header, Content, Sider } = Layout;
 
 const menuItems: MenuItem[] = [
     { icon: <UserOutlined />, label: "Dashboard", route: "/user/dashboard" },
@@ -39,6 +31,7 @@ const menuItemsWithRoutes = menuItems.map((item, index) => ({
 }));
 
 const Logged: React.FC<StateGlobalProviderProps> = ({ children }: StateGlobalProviderProps) => {
+
     const auth = getAuth();
     const user = auth.currentUser;
     const navigate = useNavigate();
@@ -53,32 +46,21 @@ const Logged: React.FC<StateGlobalProviderProps> = ({ children }: StateGlobalPro
             navigate('/');
         }
     }, [])
-    const {
-        token: { colorBgContainer, borderRadiusLG },
-    } = theme.useToken();
+
+    const handleChange = (value: string) => {
+
+    }
 
     return (
-        <Layout hasSider>
-            <Sider
-                style={{
-                    overflow: 'auto',
-                    height: '100vh',
-                    position: 'fixed',
-                    left: 0,
-                    top: 0,
-                    bottom: 0,
-                    backgroundColor: "black"
-                }}
-            >
-                <div className="demo-logo-vertical"
-                    style={{ color: "white", fontSize: "larger", display: "flex", alignItems: "center", justifyContent: "center", padding: "20px", marginBottom: "15px" }}>
+        <Layout className='layout' hasSider>
+            <Sider className='sider'>
+                <div className="logo-vertical">
                     <img
                         src={logo}
                         width="25px"
                         height="25px" /> BREATHE ESG
                 </div>
-
-                <Menu style={{ backgroundColor: "black" }} theme="dark" mode="inline" defaultSelectedKeys={['1']}>
+                <Menu className="menu" theme="dark" mode="inline" defaultSelectedKeys={['1']}>
                     {menuItemsWithRoutes.map((item) => (
                         <Menu.Item key={item.key} icon={item.icon}>
                             <Link to={`${item.route}`}>{item.label}</Link>
@@ -89,27 +71,25 @@ const Logged: React.FC<StateGlobalProviderProps> = ({ children }: StateGlobalPro
                     </Menu.Item>
                 </Menu>
             </Sider>
-            <Layout style={{ marginLeft: 200 }}>
-                <Header style={{
-                    position: 'sticky',
-                    top: 0,
-                    zIndex: 1,
-                    width: '100%',
-                    display: 'flex',
-                    alignItems: 'center',
-                    background: colorBgContainer
-                }} />
-                <Content style={{ margin: '24px 16px 0', overflow: 'initial' }}>
-                    <div
-                        style={{
-                            padding: 24,
-                            textAlign: 'center',
-                            background: colorBgContainer,
-                            borderRadius: borderRadiusLG,
-                        }}
-                    >
-                        {children}
-                    </div>
+            <Layout>
+                <Header className='header'>
+                    <img src={whitelogo} width="50px" height="50px" />
+                    <Typography className='genText'>{user?.displayName ? user.displayName.toLocaleUpperCase() : "View Name"}
+                        <Select
+                            defaultValue="North Indian Region"
+                            onChange={handleChange}
+                            options={[
+                                { value: 'N', label: 'North Indian Region' },
+                                { value: 'S', label: 'South Indian Region' },
+                            ]}
+                        />
+                    </Typography>
+                    <div className='fixed' />
+                    {user?.displayName ? user.displayName.toUpperCase() : "No Name Provided"}
+                    {user?.photoURL ? <img src={user.photoURL} width="30px" height="30px" /> : <UserOutlined />}
+                </Header>
+                <Content className='content'>
+                    {children}
                 </Content>
             </Layout>
         </Layout>
