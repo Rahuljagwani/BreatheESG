@@ -1,14 +1,20 @@
-import React from 'react';
-import logo from './logo.svg';
 import './App.css';
-import SignUpBox from './components/SignUp';
-import SignInBox from './components/SignIn';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import Logged from './pages/Logged';
+import DataEntry from './components/DataEntry';
+import Home from './pages/Home';
+import NotFoundPage from './pages/NotFoundPage';
 
 function App() {
   return (
     <>
-      <SignUpBox />
-      <SignInBox />
+      <Router>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/user/dm" element={<Logged children={<DataEntry />}/>} />
+          <Route path="/user/*" element={<Logged children={<NotFoundPage />}/>} />
+        </Routes>
+      </Router>
     </>
   );
 }
