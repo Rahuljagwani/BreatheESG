@@ -118,3 +118,78 @@
 .layout {
   height: 100vh;
 }
+
+
+
+.home{
+  background-color: #21453C;
+  display: flex;
+  flex-direction: row;
+  height: 100vh;
+  overflow-y: auto;
+  justify-content: center;
+  align-items: center;
+  gap: 400px;
+
+  .formContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    .registerForm {
+      padding: 40px;
+      width: 380px;
+      height: 482px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      background-color: #235E4A;
+      border-radius: 8px;
+
+      .link {
+        color: rgb(100, 255, 100);
+      }
+
+      .flex-center {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 5px;
+      }
+
+      .normal-white {
+        color: white;
+      }
+
+      .form-button {
+        width: 100%;
+        background-color: #2E9844;
+        border-radius: none;
+        padding: 5px;
+        font-size: larger;
+      }
+    }
+  }
+
+  .intro {
+    width: 440px;
+    height: 294px;
+    display: flex;
+    flex-direction: column;
+    padding-top: 100px;
+
+    .normal-white {
+      color: #f0f0f0;
+    }
+
+    .large-grey {
+      font-size: large;
+      color: gray;
+    }
+  }
+}
+
+.link {
+  color: green;
+}

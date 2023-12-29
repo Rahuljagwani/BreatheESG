@@ -39,26 +39,30 @@ const SignUpBox: React.FC<RegisterProp> = ({ setRegister }: RegisterProp) => {
             form={form}
             name="signup"
             autoComplete="off"
-            style={{ padding: "40px", maxWidth: 350, display: "flex", flexDirection: "column", justifyContent: "center" }}
+            className='registerForm'
             layout="vertical"
             onFinish={onFinish}
             onFinishFailed={onFinishFailed}
         >
-            <Title level={3}>Sign Up</Title>
+            <Title className='normal-white' level={3}>Sign Up</Title>
             <Form.Item<FieldType>
-                label="Email"
+                label={<label className='normal-white'>Email</label>}
                 name="email"
                 rules={[{ required: true, type: 'email', message: 'Please input valid email!' }]}
             >
                 <Input />
             </Form.Item>
 
-            <Form.Item<FieldType> label="Password" name="password" rules={[{ required: true }]}>
+            <Form.Item<FieldType>
+                label={<label className='normal-white'>Password</label>}
+                name="password"
+                rules={[{ required: true }]}
+            >
                 <Input.Password />
             </Form.Item>
 
             <Form.Item<FieldType>
-                label="Confirm Password"
+                label={<label className='normal-white'>Confirm Password</label>}
                 name="password2"
                 dependencies={['password']}
                 rules={[
@@ -78,14 +82,14 @@ const SignUpBox: React.FC<RegisterProp> = ({ setRegister }: RegisterProp) => {
                 <Input.Password />
             </Form.Item>
 
-            <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-                <Button size="large" type="primary" htmlType="submit">
+            <Form.Item>
+                <Button className='form-button' size="large" type="primary" htmlType="submit">
                     Submit
                 </Button>
             </Form.Item>
 
-            <Form.Item style={{ display: "flex", justifyContent: "center" }}>
-                <Link onClick={handleRegister}>Alreaady registered user? Sign In</Link>
+            <Form.Item className="normal-white flex-center">
+                Alreaady registered user? <Link className="link" onClick={handleRegister}>Sign In</Link>
             </Form.Item>
         </Form>
     );

@@ -6,7 +6,7 @@ import { setUser } from '../store/reducers/user';
 import { useNavigate } from 'react-router';
 import { RegisterProp } from '../@d.types';
 
-const SignInBox: React.FC<RegisterProp> = ({setRegister}: RegisterProp) => {
+const SignInBox: React.FC<RegisterProp> = ({ setRegister }: RegisterProp) => {
     const { Link, Title, Paragraph } = Typography;
     const [form] = Form.useForm();
     const dispatch = useAppDispatch();
@@ -48,36 +48,43 @@ const SignInBox: React.FC<RegisterProp> = ({setRegister}: RegisterProp) => {
             form={form}
             name="signin"
             autoComplete="off"
-            style={{ padding: "40px", maxWidth: 350, display: "flex", flexDirection: "column", justifyContent: "center" }}
+            className='registerForm'
             layout="vertical"
             onFinish={onFinish}
             onFinishFailed={onFinishFailed}
         >
-            <Title level={3}>Login</Title>
-            <Paragraph>Enter your Registered Email Id to continue</Paragraph>
+            <Title className='normal-white' level={3}>Login</Title>
+            <Paragraph className='normal-white'>Enter your Registered Email Id to continue</Paragraph>
             <Form.Item<FieldType>
-                label="Email"
+                label={<label className='normal-white'>Email</label>}
                 name="email"
                 rules={[{ required: true, type: 'email', message: 'Please input valid email!' }]}
             >
                 <Input />
             </Form.Item>
 
-            <Form.Item<FieldType> label="Password" name="password" rules={[{ required: true }]}>
+            <Form.Item<FieldType>
+                label={<label className='normal-white'>Password</label>}
+                name="password"
+                rules={[{ required: true }]}
+            >
                 <Input.Password />
             </Form.Item>
 
-            <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-                <Button size="large" type="primary" htmlType="submit">
-                    Submit
-                </Button>
-            </Form.Item>
 
-            <Form.Item style={{ display: "flex", justifyContent: "center" }}>
-            <Link onClick={handleRegister}>New user? Sign Up</Link> or sign in with Google
+            <Form.Item className='flex-center'>
                 <GoogleButton
                     onClick={handleGoogleSignIn}
                 />
+            </Form.Item>
+
+            <Form.Item>
+                <p className='normal-white flex-center'>
+                    New user? <Link className="link" onClick={handleRegister}> Sign Up</Link>  or sign in with Google
+                </p>
+                <Button className='form-button' size="large" type="primary" htmlType="submit">
+                    Submit
+                </Button>
             </Form.Item>
 
         </Form>
