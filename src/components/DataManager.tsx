@@ -4,20 +4,26 @@ import { UserOutlined } from '@ant-design/icons';
 import React, { useState } from 'react'
 import DataEntry from './DataEntry';
 import DataTracker from './DataTracker';
+import InputModal from './InputModal';
 
 const DataManager: React.FC = () => {
 
-    const handleChange = (value: string) => {
-
+    const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+    const openModal = (e: React.MouseEvent) => {
+        setIsModalOpen(true);
     }
+    const closeModal = () => {
+        setIsModalOpen(false);
+    }
+    
     const [activeTab, setActiveTab] = useState(1);
     const handleTabClick = (tabNumber: number) => {
         setActiveTab(tabNumber);
     };
 
     return (
-        <div>
-            <Header className='header' >
+        <>
+            <Header className='header-child'>
                 <div className="tab-switcher">
                     <div className={`tab ${activeTab === 1 ? 'active' : ''}`} onClick={() => handleTabClick(1)}>
                         {<UserOutlined />} Data Entry
@@ -30,7 +36,6 @@ const DataManager: React.FC = () => {
                 <Typography className='genText'>For:
                     <Select
                         defaultValue="FY 2023-24"
-                        onChange={handleChange}
                         options={[
                             { value: '23', label: 'FY 2023-24' },
                             { value: '22', label: 'FY 2022-23' },
@@ -40,15 +45,15 @@ const DataManager: React.FC = () => {
                 </Typography>
                 {
                     activeTab === 1 &&
-                    <Button size='large' className='headerButton'>Submit for Approval</Button>
+                    <Button size='large' onClick={openModal} className='headerButton'>Submit for Approval</Button>
                 }
-
             </Header>
-            <Content className='content'>
+            <InputModal closeModal={closeModal} open={isModalOpen} />
+            <Content className='content-child'>
                 {activeTab === 1 && <DataEntry />}
                 {activeTab === 2 && <DataTracker />}
             </Content>
-        </div>
+        </>
     )
 }
 

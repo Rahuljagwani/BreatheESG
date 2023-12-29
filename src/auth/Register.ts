@@ -1,11 +1,12 @@
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, signOut } from "firebase/auth";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signInWithPopup, signOut, updateProfile, User } from "firebase/auth";
 import { Providers } from "../config/firebase";
 
 const auth = getAuth();
 
-export const signUp = async (email: string, password: string) => {
+export const signUp = async (email: string, password: string, name: string) => {
     try {
         const userCred = await createUserWithEmailAndPassword(auth, email, password);
+        await updateProfile(auth.currentUser as User, {displayName: name});
         return userCred.user;
     } catch (error) {
         console.log(error);

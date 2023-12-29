@@ -22,7 +22,7 @@ const SignInBox: React.FC<RegisterProp> = ({ setRegister }: RegisterProp) => {
         const user = await signIn(values.email, values.password);
         await user?.getIdToken()
             .then((token) => {
-                dispatch(setUser({ email: user.email as string, token: token }))
+                dispatch(setUser({ email: user.email as string, token: token, name: user.displayName as string }))
             });
         navigate('/user/dm');
     };
@@ -31,7 +31,7 @@ const SignInBox: React.FC<RegisterProp> = ({ setRegister }: RegisterProp) => {
         const user = await googleSignIn();
         await user?.getIdToken()
             .then((token) => {
-                dispatch(setUser({ email: user.email as string, token: token }))
+                dispatch(setUser({ email: user.email as string, token: token, name: user.displayName as string }))
             });
         navigate('/user/dm');
     }

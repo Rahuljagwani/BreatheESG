@@ -60,18 +60,18 @@ const Logged: React.FC<StateGlobalProviderProps> = ({ children }: StateGlobalPro
                         width="25px"
                         height="25px" /> BREATHE ESG
                 </div>
-                <Menu className="menu" theme="dark" mode="inline" defaultSelectedKeys={['1']}>
+                <Menu className="menu" theme="dark" mode="inline" defaultSelectedKeys={['3']}>
                     {menuItemsWithRoutes.map((item) => (
                         <Menu.Item key={item.key} icon={item.icon}>
                             <Link to={`${item.route}`}>{item.label}</Link>
                         </Menu.Item>
                     ))}
-                    <Menu.Item icon={<UserOutlined />} >
+                    <Menu.Item className='red' icon={<UserOutlined />} >
                         <p onClick={handleLogout}>Logout</p>
                     </Menu.Item>
                 </Menu>
             </Sider>
-            <Layout>
+            <Layout className='layout-children'>
                 <Header className='header'>
                     <img src={whitelogo} width="50px" height="50px" />
                     <Typography className='genText'>{user?.displayName ? user.displayName.toLocaleUpperCase() : "View Name"}

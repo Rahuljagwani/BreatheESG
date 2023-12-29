@@ -19,10 +19,10 @@ const SignUpBox: React.FC<RegisterProp> = ({ setRegister }: RegisterProp) => {
     };
     const onFinish = async (values: FieldType) => {
         console.log("Success:", values);
-        const user = await signUp(values.email, values.password);
+        const user = await signUp(values.email, values.password, values.email.split('@')[0]);
         await user?.getIdToken()
             .then((token) => {
-                dispatch(setUser({ email: user.email as string, token: token }))
+                dispatch(setUser({ email: user.email as string, token: token, name: values.email.split('@')[0]}))
             });
         navigate('/user/dm');
     };
