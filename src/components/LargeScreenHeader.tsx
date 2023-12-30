@@ -5,9 +5,16 @@ import { auth } from '../config/firebase';
 import whitelogo from '../images/whitelogo.png'
 import { UserOutlined, DoubleLeftOutlined } from '@ant-design/icons';
 import { LSHeader } from '../@d.types';
+import { useAppSelector } from '../store/hooks';
+import { exportData } from '../services/export';
 
 const LargeScreenHeader: React.FC<LSHeader> = ({toggleSider}: LSHeader) => {
     const user = auth.currentUser;
+    const assessments = useAppSelector((state) => state.assessment.assessments);
+    const handleExport = (e: React.MouseEvent) => {
+        assessments ? exportData(assessments) : alert("No Data Present");
+    }
+
     return (
         <div className="large-screen-header">
             <Header className="header">
@@ -26,6 +33,12 @@ const LargeScreenHeader: React.FC<LSHeader> = ({toggleSider}: LSHeader) => {
                     />
                 </Typography>
                 <div className="fixed" />
+                <Button
+                    type="primary"
+                    onClick={handleExport}
+                    className='header-button'
+                >Export Data Entry
+                </Button>
                 {user?.displayName ? user.displayName.toUpperCase() : 'No Name Provided'}
                 {user?.photoURL ? <img alt='logo' src={user.photoURL} width="30px" height="30px" /> : <UserOutlined />}
             </Header>
