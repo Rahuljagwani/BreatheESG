@@ -1,4 +1,4 @@
-import { Button, Select, Typography } from 'antd';
+import { Button } from 'antd';
 import { Header } from 'antd/es/layout/layout';
 import React from 'react'
 import whitelogo from '../images/whitelogo.png'

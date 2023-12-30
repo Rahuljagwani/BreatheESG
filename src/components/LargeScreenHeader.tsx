@@ -17,7 +17,7 @@ const LargeScreenHeader: React.FC<LSHeader> = ({toggleSider}: LSHeader) => {
                     onClick={toggleSider}
                     className="collapse-button"
                 />
-                <img src={whitelogo} width="50px" height="50px" />
+                <img alt='logo' src={whitelogo} width="50px" height="50px" />
                 <Typography className="genText">
                     {user?.displayName ? user.displayName.toLocaleUpperCase() : 'View Name'}
                     <Select defaultValue="North Indian Region"
@@ -27,7 +27,7 @@ const LargeScreenHeader: React.FC<LSHeader> = ({toggleSider}: LSHeader) => {
                 </Typography>
                 <div className="fixed" />
                 {user?.displayName ? user.displayName.toUpperCase() : 'No Name Provided'}
-                {user?.photoURL ? <img src={user.photoURL} width="30px" height="30px" /> : <UserOutlined />}
+                {user?.photoURL ? <img alt='logo' src={user.photoURL} width="30px" height="30px" /> : <UserOutlined />}
             </Header>
         </div>
     )

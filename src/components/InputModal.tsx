@@ -3,7 +3,7 @@ import { Button, Form, Input, Modal, Select } from 'antd';
 import { AssessmentDataType, InputModalProps } from '../@d.types';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
 import { insertAssessments } from '../services/database';
-import { addAssessment } from '../store/reducers/assessment';
+import { setAssessments } from '../store/reducers/assessment';
 
 const InputModal: React.FC<InputModalProps> = ({ open, closeModal }: InputModalProps) => {
     const dispatch = useAppDispatch();
@@ -14,12 +14,12 @@ const InputModal: React.FC<InputModalProps> = ({ open, closeModal }: InputModalP
     const onFinish = async (values: AssessmentDataType) => {
         console.log(values);
         values.result = false;
-        values.score = null;
+        values.score = 0;
         values.status = "Pending";
-        const updatedAssessments = [...assessments, values];
+        const updatedAssessments: AssessmentDataType[]= assessments ? [...assessments, values] : [values];
         await insertAssessments(updatedAssessments, uid)
             .then(() => {
-                dispatch(addAssessment({ assessment: values }));
+                dispatch(setAssessments({assessments: updatedAssessments}));
                 closeModal();
             })
             .catch((error) => alert(error.message));

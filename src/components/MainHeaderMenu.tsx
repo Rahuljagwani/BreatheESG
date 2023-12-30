@@ -18,7 +18,7 @@ const MainHeaderMenu: React.FC = () => {
             <Menu.Item disabled>
                 <div className='menu-item'>
                 {user?.displayName ? user.displayName.toUpperCase() : 'No Name Provided'}&nbsp;&nbsp;&nbsp;
-                {user?.photoURL ? <img src={user.photoURL} width="40px" height="30px" /> : <UserOutlined />}
+                {user?.photoURL ? <img alt='logo' src={user.photoURL} width="40px" height="30px" /> : <UserOutlined />}
                 </div>
             </Menu.Item>
         </Menu>

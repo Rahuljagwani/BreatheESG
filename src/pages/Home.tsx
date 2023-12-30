@@ -10,12 +10,12 @@ const Home: React.FC = () => {
         <div className='home'>
             <div className='intro'>
                 <p className='normal-white'>WELCOME TO</p>
-                <img src={LogoName} width="350px" height="50px"></img>
+                <img alt='logo' src={LogoName} width="350px" height="50px"></img>
                 <p className='large-grey'>We help you track your organisation metrics as per ECG guidelines</p>
-                <p className='normal-white'>Sounds Interesting? <a className="link" href=''>Get in touch!</a></p>
+                <p className='normal-white'>Sounds Interesting? <a className="link" href='/'>Get in touch!</a></p>
             </div>
             <div className='formContainer'> 
-                <img src={Earth} width="156px" height="152x"></img>
+                <img alt='earth' src={Earth} width="156px" height="152x"></img>
                 {
                 register ?
                     <SignInBox setRegister={setRegister} /> :

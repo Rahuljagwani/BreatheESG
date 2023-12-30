@@ -11,7 +11,7 @@ import LargeScreenHeader from '../components/LargeScreenHeader';
 import SmallScreenHeader from '../components/SmallScreenHeader';
 
 
-const { Header, Content, Sider } = Layout;
+const { Content, Sider } = Layout;
 
 const Logged: React.FC<StateGlobalProviderProps> = ({ children }: StateGlobalProviderProps) => {
 
@@ -44,7 +44,7 @@ const Logged: React.FC<StateGlobalProviderProps> = ({ children }: StateGlobalPro
         if (!user) {
             navigate('/');
         }
-    }, [])
+    }, [user, navigate])
 
     return (
         <Layout className='layout' hasSider>
@@ -52,6 +52,7 @@ const Logged: React.FC<StateGlobalProviderProps> = ({ children }: StateGlobalPro
                 <Sider className='sider'>
                     <div className="logo-vertical">
                         <img
+                            alt='logo'
                             src={logo}
                             width="35px"
                             height="35px" /> {collapsed ? '' : "BREATHE ESG"}
