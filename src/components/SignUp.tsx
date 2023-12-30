@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button, Form, Input, Typography } from 'antd';
-import { signUp } from '../auth/Register';
+import { signUp } from '../services/auth';
 import { useAppDispatch } from '../store/hooks';
 import { useNavigate } from 'react-router';
 import { setUser } from '../store/reducers/user';
@@ -19,12 +19,22 @@ const SignUpBox: React.FC<RegisterProp> = ({ setRegister }: RegisterProp) => {
     };
     const onFinish = async (values: FieldType) => {
         console.log("Success:", values);
-        const user = await signUp(values.email, values.password, values.email.split('@')[0]);
-        await user?.getIdToken()
+        await signUp(values.email, values.password, values.email.split('@')[0])
+        .then(async (user) => {
+            await user?.getIdToken()
             .then((token) => {
-                dispatch(setUser({ email: user.email as string, token: token, name: values.email.split('@')[0]}))
-            });
+                dispatch(setUser({
+                    email: user.email as string,
+                    token: token,
+                    name: values.email.split('@')[0],
+                    uid: user.uid
+                }))
+            })
+            .catch((error) => {alert(error.message)});
         navigate('/user/dm');
+        })
+        .catch((error) => alert(error.message));
+       
     };
 
     const handleRegister = (e: React.MouseEvent) => {

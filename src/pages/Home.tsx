@@ -10,7 +10,7 @@ const Home: React.FC = () => {
         <div className='home'>
             <div className='intro'>
                 <p className='normal-white'>WELCOME TO</p>
-                <img src={LogoName} width="400px" height="50px"></img>
+                <img src={LogoName} width="350px" height="50px"></img>
                 <p className='large-grey'>We help you track your organisation metrics as per ECG guidelines</p>
                 <p className='normal-white'>Sounds Interesting? <a className="link" href=''>Get in touch!</a></p>
             </div>

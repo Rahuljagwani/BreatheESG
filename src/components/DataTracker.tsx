@@ -1,13 +1,13 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Table } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
-import { UserOutlined } from '@ant-design/icons';
+import { PieChartOutlined, BorderVerticleOutlined } from '@ant-design/icons';
 
 interface DataType {
   key: React.Key;
   month: string;
   status: string;
-  completion: number;
+  completion: string;
   bu: string;
 }
 
@@ -15,45 +15,47 @@ const columns: ColumnsType<DataType> = [
   {
     title: 'MONTH',
     dataIndex: 'month',
+    align: 'center'
   },
   {
     title: 'STATUS',
     dataIndex: 'status',
+    align: 'center'
   },
   {
     title: 'COMPLETION',
     dataIndex: 'completion',
+    align: 'center'
   },
   {
     title: 'BUSINESS UNIT',
     dataIndex: 'bu',
+    align: 'center'
   }
 ];
 
-const data: DataType[] = [];
-
-data.push({
+const data: DataType[] = [{
   key: 0,
-  month: "January",
+  month: "JAN 2023",
+  status: "Approved",
+  completion: "20%",
+  bu: "Business Unit 1",
+},
+{
+  key: 0,
+  month: "FEB 2023",
   status: "Pending Approval",
-  completion: 20,
-  bu: "BU 1",
-});
-
+  completion: "30%",
+  bu: "Business Unit 1",
+},{
+  key: 0,
+  month: "MARCH 223",
+  status: "Incomplete",
+  completion: "50%",
+  bu: "Business Unit 1",
+}];
 
 const DataTracker: React.FC = () => {
-  const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
-  const [loading, setLoading] = useState(false);
-
-  const start = () => {
-    setLoading(true);
-    // ajax request after empty completing
-    setTimeout(() => {
-      setSelectedRowKeys([]);
-      setLoading(false);
-    }, 1000);
-  };
-
   return (
     <>
       <div className='flex-center'>
@@ -62,14 +64,14 @@ const DataTracker: React.FC = () => {
             <p className='grey'>Pending Trackers</p>
             <h1>45/60</h1>
           </div>
-          <UserOutlined className='icon'/>
+          <PieChartOutlined className='icon'/>
         </div>
         <div className='block'>
           <div>
             <p className='grey'>Pending Reviews</p>
             <h1>3</h1>
           </div>
-          <UserOutlined className='icon'/>
+          <BorderVerticleOutlined className='icon'/>
         </div>
       </div>
       <Table columns={columns} dataSource={data} />

@@ -9,7 +9,7 @@ export const signUp = async (email: string, password: string, name: string) => {
         await updateProfile(auth.currentUser as User, {displayName: name});
         return userCred.user;
     } catch (error) {
-        console.log(error);
+        throw(error);
     }
 }
 
@@ -18,7 +18,7 @@ export const signIn = async (email: string, password: string) => {
         const userCred = await signInWithEmailAndPassword(auth, email, password);
         return userCred.user;
     } catch (error) {
-        console.log(error);
+        throw(error);
     }
 }
 
@@ -27,13 +27,13 @@ export const googleSignIn = async () => {
         const userCred = await signInWithPopup(auth, Providers.google);
         return userCred.user;
     } catch (error) {
-        console.log(error);
+        throw(error);
     }
 }
 
 export const signOutLocal = async () => {
     await signOut(auth).then(() => {
       }).catch((error) => {
-        console.log(error);
+        throw(error);
       });
 }

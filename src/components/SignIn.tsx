@@ -1,10 +1,12 @@
 import { Button, Form, Input, Typography } from 'antd';
 import GoogleButton from 'react-google-button';
-import { googleSignIn, signIn } from '../auth/Register';
-import { useAppDispatch, useAppSelector } from '../store/hooks';
+import { googleSignIn, signIn } from '../services/auth';
+import { useAppDispatch } from '../store/hooks';
 import { setUser } from '../store/reducers/user';
 import { useNavigate } from 'react-router';
 import { RegisterProp } from '../@d.types';
+import { getAssessments } from '../services/database';
+import { setAssessments } from '../store/reducers/assessment';
 
 const SignInBox: React.FC<RegisterProp> = ({ setRegister }: RegisterProp) => {
     const { Link, Title, Paragraph } = Typography;
@@ -18,22 +20,50 @@ const SignInBox: React.FC<RegisterProp> = ({ setRegister }: RegisterProp) => {
     };
 
     const onFinish = async (values: FieldType) => {
-        console.log("Success:", values);
-        const user = await signIn(values.email, values.password);
-        await user?.getIdToken()
-            .then((token) => {
-                dispatch(setUser({ email: user.email as string, token: token, name: user.displayName as string }))
-            });
-        navigate('/user/dm');
+        await signIn(values.email, values.password)
+            .then(async (user) => {
+                await user?.getIdToken()
+                    .then((token) => {
+                        dispatch(setUser({
+                            uid: user.uid,
+                            email: user.email as string,
+                            token: token,
+                            name: user.displayName as string
+                        }))
+                    })
+                    .catch((error) => { alert(error.message) });
+                await getAssessments(user.uid)
+                    .then((firebaseAssessments) => {
+                        dispatch(setAssessments({ assessments: firebaseAssessments }));
+                    })
+                    .catch((error) => alert(error.message));
+                navigate('/user/dm');
+            })
+            .catch((error) => alert(error.message));
+
     };
 
     const handleGoogleSignIn = async (e: React.MouseEvent) => {
-        const user = await googleSignIn();
-        await user?.getIdToken()
-            .then((token) => {
-                dispatch(setUser({ email: user.email as string, token: token, name: user.displayName as string }))
-            });
-        navigate('/user/dm');
+        await googleSignIn()
+            .then(async (user) => {
+                await user?.getIdToken()
+                    .then(async (token) => {
+                        dispatch(setUser({
+                            uid: user.uid,
+                            email: user.email as string,
+                            token: token,
+                            name: user.displayName as string
+                        }));
+                    })
+                    .catch((error) => { alert(error.message) });
+                await getAssessments(user.uid)
+                    .then((firebaseAssessments) => {
+                        dispatch(setAssessments({ assessments: firebaseAssessments }));
+                    })
+                    .catch((error) => alert(error.message));
+                navigate('/user/dm');
+            })
+            .catch((error) => alert(error.message));
     }
 
     const handleRegister = (e: React.MouseEvent) => {

@@ -1,18 +1,34 @@
 import React from 'react';
 import { Button, Form, Input, Modal, Select } from 'antd';
-import { AssignmentDataType, InputModalProps } from '../@d.types';
+import { AssessmentDataType, InputModalProps } from '../@d.types';
+import { useAppDispatch, useAppSelector } from '../store/hooks';
+import { insertAssessments } from '../services/database';
+import { addAssessment } from '../store/reducers/assessment';
 
 const InputModal: React.FC<InputModalProps> = ({ open, closeModal }: InputModalProps) => {
-
+    const dispatch = useAppDispatch();
+    const assessments = useAppSelector((state) => state.assessment.assessments);
+    const uid = useAppSelector((state) => state.user.uid);
     const [form] = Form.useForm();
 
-    const onFinish = async (values: AssignmentDataType) => {
-        console.log("Success:", values);
-        closeModal();
+    const onFinish = async (values: AssessmentDataType) => {
+        console.log(values);
+        values.result = false;
+        values.score = null;
+        values.status = "Pending";
+        const updatedAssessments = [...assessments, values];
+        await insertAssessments(updatedAssessments, uid)
+            .then(() => {
+                dispatch(addAssessment({ assessment: values }));
+                closeModal();
+            })
+            .catch((error) => alert(error.message));
+
     };
 
     const onFinishFailed = (errorInfo: any) => {
         console.log("Failed:", errorInfo);
+        alert("Error inserting data");
     };
 
     return (
@@ -32,7 +48,7 @@ const InputModal: React.FC<InputModalProps> = ({ open, closeModal }: InputModalP
                     onFinish={onFinish}
                     onFinishFailed={onFinishFailed}
                 >
-                    <Form.Item<AssignmentDataType>
+                    <Form.Item<AssessmentDataType>
                         label="Assessment Title"
                         name="assessment"
                         rules={[{ required: true, message: 'Assessment Title is Required' }]}
@@ -40,12 +56,12 @@ const InputModal: React.FC<InputModalProps> = ({ open, closeModal }: InputModalP
                         <Input />
                     </Form.Item>
 
-                    <Form.Item<AssignmentDataType>
+                    <Form.Item<AssessmentDataType>
                         label="Type"
                         name="type"
+                        rules={[{ required: true, message: "Select from below"}]}
                     >
                         <Select
-                            defaultValue="Custom"
                             options={[
                                 { value: 'Custom', label: 'Custom' },
                                 { value: 'BRSR', label: 'BRSR' }
@@ -53,20 +69,20 @@ const InputModal: React.FC<InputModalProps> = ({ open, closeModal }: InputModalP
                         />
                     </Form.Item>
 
-                    <Form.Item<AssignmentDataType>
+                    <Form.Item<AssessmentDataType>
                         label="Number of Suppliers"
                         name="nos"
-                        rules={[{ required: true, pattern: new RegExp(/^[0-9]+$/) ,message: 'Number of Suppliers is required' }]}
+                        rules={[{ required: true, pattern: new RegExp(/^[0-9]+$/), message: 'Must be number and required' }]}
                     >
                         <Input />
                     </Form.Item>
 
-                    <Form.Item<AssignmentDataType>
+                    <Form.Item<AssessmentDataType>
                         label="Risk Classification"
                         name="rc"
+                        rules={[{ required: true, message: "Select from below"}]}
                     >
                         <Select
-                            defaultValue="Medium"
                             options={[
                                 { value: 'Medium', label: 'Medium' },
                                 { value: 'Low', label: 'Low' },

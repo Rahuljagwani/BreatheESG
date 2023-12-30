@@ -1,71 +1,77 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Table } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
-import { UserOutlined } from '@ant-design/icons';
-import { AssignmentDataType } from '../@d.types';
-
-
-const columns: ColumnsType<AssignmentDataType> = [
-  {
-    title: 'ASSESSMENT TITLE',
-    dataIndex: 'assessment',
-  },
-  {
-    title: 'TYPE',
-    dataIndex: 'type',
-  },
-  {
-    title: 'NO OF SUPPLLIERS',
-    dataIndex: 'nos',
-  },
-  {
-    title: 'SCORE',
-    dataIndex: 'score',
-  },
-  {
-    title: 'RISK CLASSIFICATION',
-    dataIndex: 'rc',
-  },
-  {
-    title: 'STATUS',
-    dataIndex: 'status',
-  },
-  {
-    title: 'RESULT',
-    dataIndex: 'result',
-  },
-  {
-    title: 'ACTION',
-    dataIndex: 'action',
-    render: () => <UserOutlined />,
-  },
-];
-
-const data: AssignmentDataType[] = [];
-
-data.push({
-  key: 0,
-  assessment: "assignment",
-  type: "",
-  nos: 5,
-  score: 50,
-  rc: "",
-  status: "",
-  result: true,
-});
+import { DeleteOutlined } from '@ant-design/icons';
+import { AssessmentDataType } from '../@d.types';
+import { useAppDispatch, useAppSelector } from '../store/hooks';
+import { setAssessments } from '../store/reducers/assessment';
+import { insertAssessments } from '../services/database';
 
 const DataEntry: React.FC = () => {
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
-  const [loading, setLoading] = useState(false);
-
-  const start = () => {
-    setLoading(true);
-    // ajax request after empty completing
-    setTimeout(() => {
-      setSelectedRowKeys([]);
-      setLoading(false);
-    }, 1000);
+  const dispatch = useAppDispatch();
+  const assessments: AssessmentDataType[] = useAppSelector((state) => state.assessment.assessments);
+  const uid = useAppSelector((state) => state.user.uid);
+  
+  const handleDelete = async (record: AssessmentDataType, e: React.MouseEvent) => {
+    const updatedAssessments: AssessmentDataType[] = assessments.filter((rec) => rec !== record);
+    await insertAssessments(updatedAssessments, uid)
+            .then(() => {
+                dispatch(setAssessments({ assessments: updatedAssessments }));
+            })
+            .catch((error) => alert(error.message));
   };
+
+  const columns: ColumnsType<AssessmentDataType> = [
+    {
+      title: 'ASSESSMENT TITLE',
+      dataIndex: 'assessment',
+      align: 'center'
+    },
+    {
+      title: 'TYPE',
+      dataIndex: 'type',
+      align: 'center'
+    },
+    {
+      title: 'NO OF SUPPLLIERS',
+      dataIndex: 'nos',
+      align: 'center'
+    },
+    {
+      title: 'SCORE',
+      dataIndex: 'score',
+      render: () => "-",
+      align: 'center'
+    },
+    {
+      title: 'RISK CLASSIFICATION',
+      dataIndex: 'rc',
+      align: 'center'
+    },
+    {
+      title: 'STATUS',
+      dataIndex: 'status',
+      render: () => "Pending",
+      align: 'center'
+    },
+    {
+      title: 'RESULT',
+      dataIndex: 'result',
+      render: () => "-",
+      align: 'center'
+    },
+    {
+      title: 'ACTION',
+      dataIndex: 'action',
+      render: (text, record) => (
+        <span onClick={(e) => handleDelete(record, e)}>
+          <DeleteOutlined />
+        </span>
+      ),
+      align: 'center'
+    },
+  ];
 
   const onSelectChange = (newSelectedRowKeys: React.Key[]) => {
     console.log('selectedRowKeys changed: ', newSelectedRowKeys);
@@ -76,10 +82,9 @@ const DataEntry: React.FC = () => {
     selectedRowKeys,
     onChange: onSelectChange,
   };
-  const hasSelected = selectedRowKeys.length > 0;
 
   return (
-      <Table rowSelection={rowSelection} columns={columns} dataSource={data} />
+    <Table style={{zIndex: "unset"}} rowSelection={rowSelection} columns={columns} dataSource={assessments} />
   );
 }
 
